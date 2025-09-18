@@ -2,6 +2,11 @@
 <!doctype html>
 <html lang="en">
 <head>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>HAR!HARAN R — Portfolio</title>
@@ -21,7 +26,8 @@
           },
           fontFamily: {
             heading: ['Roboto Slab', 'serif'],
-            body: ['Inter', 'system-ui', 'sans-serif']
+            body: ['Inter', 'system-ui', 'sans-serif'],
+            cinzel: ['"Cinzel Decorative"', 'cursive']
           }
         }
       }
@@ -44,32 +50,86 @@
     }
     .reveal { opacity: 0; transform: translateY(16px) scale(.995); transition: all .6s cubic-bezier(.2,.9,.2,1); }
     .reveal.visible { opacity: 1; transform: translateY(0) scale(1); }
+ /* desktop sway */
+  @keyframes sway {
+    0% { transform: translateX(-8px); }
+    50% { transform: translateX(8px); }
+    100% { transform: translateX(-8px); }
+  }
+  /* smaller amplitude for phones */
+  @keyframes sway-mobile {
+    0% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    100% { transform: translateX(-4px); }
+  }
+
+  .skills-col.sway { animation: sway var(--s-duration, 6.5s) ease-in-out infinite; }
+  /* use smaller sway on narrow screens */
+  @media (max-width: 639px) {
+    .skills-col.sway { animation-name: sway-mobile; }
+  }
+
+  /* column speed/direction variations */
+  .skills-grid > .skills-col:nth-child(1).sway { --s-duration: 6s; animation-direction: alternate; }
+  .skills-grid > .skills-col:nth-child(2).sway { --s-duration: 7s; animation-direction: alternate-reverse; }
+  .skills-grid > .skills-col:nth-child(3).sway { --s-duration: 6.4s; animation-direction: alternate; }
+  .skills-grid > .skills-col:nth-child(4).sway { --s-duration: 7.6s; animation-direction: alternate-reverse; }
+
+  /* touch + keyboard friendly tiles */
+  .skill-item {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform .22s cubic-bezier(.2,.9,.2,1), box-shadow .22s;
+    cursor: pointer;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .skill-item:active { transform: scale(.97); }
+  .skill-item:focus { outline: none; box-shadow: 0 0 0 6px rgba(255,75,43,.10); transform: translateY(-4px) scale(1.02); }
+
+  /* hover push left/right (keeps playful movement on desktop) */
+  .skills-grid > .skills-col:nth-child(even) .skill-item:hover { transform: translateX(10px) scale(1.03); }
+  .skills-grid > .skills-col:nth-child(odd)  .skill-item:hover { transform: translateX(-10px) scale(1.03); }
+
+  /* responsive spacing */
+  .skill-label { font-size: .85rem; margin-top: .45rem; color: rgba(255,255,255,.9); text-align:center; }
+
+  /* accessibility: reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    .skills-col.sway { animation: none !important; }
+    .skill-item { transition: none !important; }
+  }
+
   </style>
 </head>
+
+
 <body class="font-body bg-edgeBlack text-white selection:bg-edgeOrange selection:text-black">
 
   <!-- Loading overlay -->
-  <div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-edgeBlack">
-    <div class="flex flex-col items-center gap-6">
-      <!-- animated small logo -->
-      <svg id="loader-logo" width="84" height="84" viewBox="0 0 100 100" class="animate-bounce">
-        <defs>
-          <linearGradient id="g" x1="0" x2="1">
-            <stop offset="0" stop-color="#FF4B2B"/>
-            <stop offset="1" stop-color="#FF8A50"/>
-          </linearGradient>
-        </defs>
-        <circle cx="50" cy="50" r="40" fill="url(#g)" opacity="0.95"/>
-        <path d="M50 30 L68 50 L50 70 L32 50 Z" fill="#fff"/>
-      </svg>
+<div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-edgeBlack">
+  <div class="flex flex-col items-center gap-6">
+    <!-- Square logo directly -->
+    <img
+      id="loader-logo"
+      src="../assets/image/Hari_Name - Copy.jpg"
+      alt="Site logo"
+      class="animate-bounce"
+      style="width:84px; height:84px; object-fit:contain; display:block;"
+      decoding="async"
+    />
 
-      <div class="w-64 h-2 bg-white/10 rounded-full overflow-hidden">
-        <div id="loader-bar" class="h-2 bg-edgeOrange w-0 rounded-full transition-all duration-700"></div>
-      </div>
-
-      <div class="text-sm text-edgeMuted">Preparing…</div>
+    <!-- progress bar -->
+    <div class="w-64 h-2 bg-white/10 rounded-full overflow-hidden">
+      <div id="loader-bar" class="h-2 bg-edgeOrange w-0 rounded-full transition-all duration-700"></div>
     </div>
+
+    <div class="text-sm text-edgeMuted">Preparing…</div>
   </div>
+</div>
+
+
 
   <!-- Page wrapper -->
   <div id="site" class="opacity-0 transition-opacity duration-500">
@@ -87,11 +147,11 @@
           class="w-12 h-12 object-cover rounded-md border border-white/20 shadow-md"
         >
       </div>
-      <div class="font-semibold text-lg text-white">Hariharan R</div>
+      <div class="font-cinzel text-lg text-white font-bold">HAR<Span class="text-edgeOrange">!</Span>HARAN R</div>
     </div>
 
     <!-- Middle: Navigation -->
-    <nav class="hidden md:flex items-center gap-6 text-sm text-gray-300">
+    <nav class="hidden md:flex items-center gap-6 text-sm text-gray-300 text-lg">
       <a href="#about" class="hover:text-orange-500 transition">About</a>
       <a href="#skills" class="hover:text-white transition">Skills</a>
       <a href="#projects" class="hover:text-white transition">Projects</a>
@@ -117,15 +177,22 @@
         <div class="space-y-6">
           <div class="inline-flex items-center gap-3 text-sm edge-acrylic px-3 py-1 rounded-full text-edgeMuted">
             <i class="fa-solid fa-star"></i>
-            <span>What’s new in my work</span>
+            <span>WELCOME TO MY WORLD</span>
           </div>
 
           <h1 class="text-4xl md:text-6xl font-heading leading-tight">
-            Building fast, accessible apps with a <span class="text-edgeOrange">bold</span> and clean UI.
+            I'm <span class="text-edgeOrange">Hariharan</span>
           </h1>
 
-          <p class="text-edgeMuted max-w-xl">
-            I’m Hariharan — M.Sc. Computer Science. I build web apps, desktop tools and AI-connected features (PDF→Audio, TTS). I focus on performance, accessibility and crisp visuals.
+            <div class="text-edgeMuted md:text-xl font-semibold h-10">
+    <span class="animate-typing pr-2">
+      A Web Developer & Web Designer
+    </span>
+
+  </div>
+
+          <p class="text-edgeMuted max-w-xl italic ">
+            A passionate MERN stack developer with project experience in web and desktop applications. I enjoy building simple web apps, learning new tech, and sharing knowledge as a tutor.
           </p>
 
           <div class="flex gap-4 items-center">
@@ -169,7 +236,7 @@
       <div class="grid md:grid-cols-3 gap-8 items-start">
         <div class="md:col-span-2 space-y-4 reveal">
           <h2 class="text-2xl font-semibold">About</h2>
-          <p class="text-edgeMuted">I build responsive web apps and Windows desktop tools, exploring Data Science, visualization and accessible UI. I love clean interfaces with subtle motion and clear typography.</p>
+          <p class="text-edgeMuted">I am a MERN stack developer with practice from online course projects and some basic desktop application development. I like to build simple and user-friendly web applications. I am always ready to learn new things and also enjoy teaching and sharing my knowledge as a tutor and content creator.</p>
 
           <div class="grid sm:grid-cols-2 gap-4 mt-6">
             <div class="p-4 rounded-lg edge-acrylic border border-white/6">
@@ -195,26 +262,140 @@
     </section>
 
     <!-- Skills -->
-    <section id="skills" class="bg-gradient-to-b from-[#070707] via-[#07121a] to-[#0a0f18] py-12">
-      <div class="max-w-6xl mx-auto px-6">
-        <h2 class="text-2xl font-semibold reveal">Skills</h2>
-        <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <!-- badges -->
-          <div class="p-4 rounded-lg edge-acrylic border border-white/6 reveal">
-            <div class="font-semibold mb-2">Frontend</div>
-            <div class="text-edgeMuted text-sm">HTML, CSS, JavaScript, React, Tailwind</div>
+<section id="skills" class="py-10">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="text-2xl font-semibold mb-6">Skills</h2>
+
+    <!-- MOBILE: 2 columns (touch friendly). SM+: 2 cols, MD+: 3, LG+:4 -->
+    <div class="skills-grid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 justify-items-center">
+
+      <!-- Column 1 -->
+      <div class="skills-col flex flex-col items-center gap-4">
+        <!-- each skill-item is touch friendly and keyboard-accessible -->
+        <div role="button" tabindex="0" aria-label="HTML5" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="../public/html5.svg" alt="HTML5" class="w-10 h-10" />
           </div>
-          <div class="p-4 rounded-lg edge-acrylic border border-white/6 reveal">
-            <div class="font-semibold mb-2">Backend</div>
-            <div class="text-edgeMuted text-sm">Python, Flask, Node.js</div>
+          <div class="skill-label">HTML5</div>
+        </div>
+
+        <div role="button" tabindex="0" aria-label="Tailwind CSS" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="../public/tailwind.svg" alt="Tailwind" class="w-10 h-10" />
           </div>
-          <div class="p-4 rounded-lg edge-acrylic border border-white/6 reveal">
-            <div class="font-semibold mb-2">Data & AI</div>
-            <div class="text-edgeMuted text-sm">Pandas, Whisper, TTS</div>
+          <div class="skill-label">Tailwind CSS</div>
+        </div>
+
+        <div role="button" tabindex="0" aria-label="NPM" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="/icons/npm.svg" alt="NPM" class="w-10 h-10" />
           </div>
+          <div class="skill-label">NPM</div>
+        </div>
+
+        <div role="button" tabindex="0" aria-label="Next.js" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="/icons/nextjs.svg" alt="Next.js" class="w-10 h-10" />
+          </div>
+          <div class="skill-label">Next.js</div>
         </div>
       </div>
-    </section>
+
+      <!-- Column 2 -->
+      <div class="skills-col flex flex-col items-center gap-4">
+        <div role="button" tabindex="0" aria-label="CSS3" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="../public/css3.svg" alt="CSS3" class="w-10 h-10" />
+          </div>
+          <div class="skill-label">CSS3</div>
+        </div>
+
+        <div role="button" tabindex="0" aria-label="React.js" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="../public/react.svg" alt="React" class="w-10 h-10" />
+          </div>
+          <div class="skill-label">React.js</div>
+        </div>
+
+        <div role="button" tabindex="0" aria-label="Node.js" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="/icons/nodejs.svg" alt="Node.js" class="w-10 h-10" />
+          </div>
+          <div class="skill-label">Node.js</div>
+        </div>
+
+        <div role="button" tabindex="0" aria-label="JWT" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="../public/C_Sharp.svg" alt="C#" class="w-10 h-10" />
+          </div>
+          <div class="skill-label">JWT</div>
+        </div>
+      </div>
+
+      <!-- Column 3 -->
+      <div class="skills-col flex flex-col items-center gap-4">
+        <div role="button" tabindex="0" aria-label="JavaScript" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="../public/js.svg" alt="JavaScript" class="w-10 h-10" />
+          </div>
+          <div class="skill-label">JavaScript</div>
+        </div>
+
+        <div role="button" tabindex="0" aria-label="Redux" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="../public/Visual_Studio.svg" alt="Visual Studio" class="w-10 h-10" />
+          </div>
+          <div class="skill-label">Redux</div>
+        </div>
+
+        <div role="button" tabindex="0" aria-label="Express.js" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="/icons/express.svg" alt="Express" class="w-10 h-10" />
+          </div>
+          <div class="skill-label">Express.js</div>
+        </div>
+
+        <div role="button" tabindex="0" aria-label="Socket.IO" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="/icons/socketio.svg" alt="Socket.IO" class="w-10 h-10" />
+          </div>
+          <div class="skill-label">Socket.IO</div>
+        </div>
+      </div>
+
+      <!-- Column 4 -->
+      <div class="skills-col flex flex-col items-center gap-4">
+        <div role="button" tabindex="0" aria-label="Bootstrap" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="../public/bootstrap.svg" alt="Bootstrap" class="w-10 h-10" />
+          </div>
+          <div class="skill-label">Bootstrap</div>
+        </div>
+
+        <div role="button" tabindex="0" aria-label="MongoDB" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="/icons/mongodb.svg" alt="MongoDB" class="w-10 h-10" />
+          </div>
+          <div class="skill-label">MongoDB</div>
+        </div>
+
+        <div role="button" tabindex="0" aria-label="Git" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="/icons/git.svg" alt="Git" class="w-10 h-10" />
+          </div>
+          <div class="skill-label">Git</div>
+        </div>
+
+        <div role="button" tabindex="0" aria-label="Figma" class="skill-item w-full max-w-[140px]">
+          <div class="w-20 h-20 sm:w-16 sm:h-16 rounded-lg bg-white/6 flex items-center justify-center shadow-sm">
+            <img src="/icons/figma.svg" alt="Figma" class="w-10 h-10" />
+          </div>
+          <div class="skill-label">Figma</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
     <!-- Projects -->
     <section id="projects" class="max-w-6xl mx-auto px-6 py-12">
@@ -306,7 +487,7 @@
     <!-- Footer -->
     <footer class="border-t border-white/6 py-8">
       <div class="max-w-6xl mx-auto px-6 flex items-center justify-between text-sm text-edgeMuted">
-        <div>© <span id="year"></span> Hariharan R</div>
+        <div> &copy; <span id="year"></span> Hariharan R</div>
         <div class="flex gap-4">
           <a href="#" class="hover:text-white">Privacy</a>
           <a href="#" class="hover:text-white">GitHub</a>
@@ -359,6 +540,38 @@
     // optional: allow drag-and-drop photo replace (client-side)
     const photo = document.getElementById('me-photo');
     photo.addEventListener('click', () => alert('Replace this image by changing the src of #me-photo in the HTML (or drag & drop if you implement it).'));
+
+      // Toggle sway only when grid is in view AND screen is wide enough
+  (function(){
+    const grid = document.querySelector('.skills-grid');
+    if (!grid) return;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const cols = document.querySelectorAll('.skills-col');
+        // only animate on >= 640px and if user NOT prefer reduced motion
+        if (entry.isIntersecting && window.innerWidth >= 640 && !prefersReduced) {
+          cols.forEach(c => c.classList.add('sway'));
+        } else {
+          cols.forEach(c => c.classList.remove('sway'));
+        }
+      });
+    }, { threshold: 0.12 });
+    observer.observe(grid);
+
+    // keyboard support: Enter/Space triggers a little press animation
+    document.querySelectorAll('.skill-item[tabindex]').forEach(item => {
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          item.classList.add('press');
+          setTimeout(()=> item.classList.remove('press'), 150);
+          // optional: open details / modal here
+        }
+      });
+    });
+  })();
   </script>
 </body>
 </html>
